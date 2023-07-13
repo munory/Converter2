@@ -30,7 +30,7 @@ public class Main {
         writeString(json);
     }
 
-    public static List<Employee> parseXML(String fileName ) {
+    public static List<Employee> parseXML(String fileName) {
 
         var result = new ArrayList<Employee>();
 
@@ -45,16 +45,17 @@ public class Main {
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
-                System.out.println("Teкyщий элeмeнт: " + node.getNodeName());
 
                 if (Node.ELEMENT_NODE == node.getNodeType()) {
                     Element employee = (Element) node;
 
-                    result.add(new Employee(Long.parseLong(employee.getAttribute("id")),
-                            employee.getAttribute("firstName"),
-                            employee.getAttribute("lastName"),
-                            employee.getAttribute("country"),
-                            Integer.parseInt(employee.getAttribute("age"))));
+                    result.add(new Employee(
+                            Long.parseLong(employee.getElementsByTagName("id").item(0).getTextContent()),
+                            employee.getElementsByTagName("firstName").item(0).getTextContent(),
+                            employee.getElementsByTagName("lastName").item(0).getTextContent(),
+                            employee.getElementsByTagName("country").item(0).getTextContent(),
+                            Integer.parseInt(employee.getElementsByTagName("age").item(0).getTextContent()))
+                    );
                 }
             }
 
@@ -84,7 +85,8 @@ public class Main {
 
         Gson gson = builder.create();
 
-        Type listType = new TypeToken<List<Employee>>() {}.getType();
+        Type listType = new TypeToken<List<Employee>>() {
+        }.getType();
 
         String json = gson.toJson(list, listType);
 
